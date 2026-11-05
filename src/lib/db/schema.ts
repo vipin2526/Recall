@@ -1,3 +1,5 @@
+// Kept as a TS string so serverless bundlers always include the DDL.
+export const SCHEMA_SQL = `
 PRAGMA journal_mode = WAL;
 PRAGMA foreign_keys = ON;
 
@@ -108,3 +110,4 @@ CREATE TABLE IF NOT EXISTS capture_dedup (
   created_at INTEGER NOT NULL,
   PRIMARY KEY (user_id, idempotency_key)
 );
+`;

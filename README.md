@@ -48,7 +48,7 @@ src/
     ids.ts                   ids, sha256, URL normalization
     db/
       connection.ts          better-sqlite3 singleton, WAL
-      schema.sql             tables and indexes (applied on connect)
+      schema.ts              tables and indexes (applied on connect)
       queries.ts             card and user queries
       stats.ts               daily/weekly aggregates, streaks, forecast
     ai/

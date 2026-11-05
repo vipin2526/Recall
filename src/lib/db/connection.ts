@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import fs from 'node:fs';
 import path from 'node:path';
+import { SCHEMA_SQL } from './schema';
 
 const globalForDb = globalThis as unknown as {
   __recallDb?: Database.Database;
@@ -26,12 +27,7 @@ export function getDb(): Database.Database {
   db.pragma('journal_mode = WAL');
   db.pragma('foreign_keys = ON');
   db.pragma('busy_timeout = 5000');
-  db.exec(
-    fs.readFileSync(
-      path.join(/* turbopackIgnore: true */ process.cwd(), 'src/lib/db/schema.sql'),
-      'utf8',
-    ),
-  );
+  db.exec(SCHEMA_SQL);
 
   globalForDb.__recallDb = db;
   globalForDb.__recallDbFile = file;
