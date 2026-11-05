@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom';
-import { Readability } from '@mozilla/readability';
 import { lookup } from 'node:dns/promises';
 import { isIP } from 'node:net';
 import { normalizeUrl } from '../ids';
@@ -201,8 +199,20 @@ async function fetchHtml(url: string): Promise<string> {
   throw new DocumentError('too_many_redirects', 'That link redirected too many times. Paste the text instead.');
 }
 
-function parseHtml(html: string, url: string): { text: string; title?: string } {
-  let dom: JSDOM;
+// jsdom and Readability are loaded on demand: they are only needed for URL
+// captures, and keeping them out of the module graph lets text capture start
+// even where the DOM libraries are unavailable (e.g. serverless bundles).
+async function parseHtml(html: string, url: string): Promise<{ text: string; title?: string }> {
+  let JSDOM: typeof import('jsdom').JSDOM;
+  let Readability: typeof import('@mozilla/readability').Readability;
+  try {
+    ({ JSDOM } = await import('jsdom'));
+    ({ Readability } = await import('@mozilla/readability'));
+  } catch {
+    throw new DocumentError('parse_failed', 'We could not read that page. Paste the text instead.');
+  }
+
+  let dom: import('jsdom').JSDOM;
   try {
     dom = new JSDOM(html, { url });
   } catch {
@@ -262,7 +272,7 @@ export async function extractText(source: CaptureSource): Promise<ExtractedDocum
     throw new DocumentError('empty_page', 'That page returned no content. Paste the text instead.');
   }
 
-  const parsed = parseHtml(html, url);
+  const parsed = await parseHtml(html, url);
   const text = normalizeText(parsed.text);
   if (text.length < 20) {
     throw new DocumentError('empty_page', 'We could not find readable text on that page. Paste the text instead.');
