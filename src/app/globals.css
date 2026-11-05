@@ -1,0 +1,182 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f7f3ea;
+  --color-paper-soft: #fcf9f3;
+  --color-paper-deep: #efe8da;
+  --color-ink: #1d1a15;
+  --color-muted: #6d6558;
+  --color-line: #ddd3c2;
+  --color-accent: #0f766e;
+  --color-accent-deep: #0b5b55;
+  --color-accent-soft: #d9efe9;
+  --color-amber: #b45309;
+  --color-amber-soft: #f6e7ce;
+  --color-danger: #b91c1c;
+  --color-danger-deep: #991b1b;
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, Consolas, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--color-paper);
+    background-image: radial-gradient(
+      1100px 520px at 50% -220px,
+      rgba(255, 255, 255, 0.65),
+      rgba(255, 255, 255, 0) 70%
+    );
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  ::selection {
+    background: var(--color-accent-soft);
+    color: var(--color-ink);
+  }
+}
+
+.card-surface {
+  background: rgba(255, 253, 248, 0.84);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow:
+    0 1px 0 rgba(29, 26, 21, 0.04),
+    0 12px 32px -24px rgba(29, 26, 21, 0.35);
+}
+
+.card-inset {
+  background: rgba(239, 232, 218, 0.42);
+  border: 1px solid color-mix(in srgb, var(--color-line) 80%, transparent);
+  border-radius: 0.875rem;
+}
+
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Mono-ish small caps used for eyebrows, labels and table headers. */
+.label-caps {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.field {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+  background: rgba(255, 253, 248, 0.92);
+  padding: 0.625rem 0.875rem;
+  color: var(--color-ink);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+.field::placeholder {
+  color: color-mix(in srgb, var(--color-muted) 68%, transparent);
+}
+.field:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-line) 55%, var(--color-muted));
+}
+.field:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: #fffdf8;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 15%, transparent);
+}
+.field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.field[aria-invalid='true'] {
+  border-color: color-mix(in srgb, var(--color-danger) 75%, var(--color-line));
+}
+.field[aria-invalid='true']:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 14%, transparent);
+}
+textarea.field {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-rise {
+  animation: rise 220ms ease-out both;
+}
+
+.animate-fade {
+  animation: fade 160ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
