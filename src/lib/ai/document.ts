@@ -208,10 +208,8 @@ async function parseHtml(html: string, url: string): Promise<{ text: string; tit
   try {
     ({ JSDOM } = await import('jsdom'));
     ({ Readability } = await import('@mozilla/readability'));
-  } catch (err) {
-    // TEMP diagnostic: surface the import failure in production logs/SSE.
-    const detail = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
-    throw new DocumentError('parse_failed', `We could not read that page. Paste the text instead. [${detail}]`);
+  } catch {
+    throw new DocumentError('parse_failed', 'We could not read that page. Paste the text instead.');
   }
 
   let dom: import('jsdom').JSDOM;
